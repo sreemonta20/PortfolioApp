@@ -1,0 +1,260 @@
+<!-- src/app/features/profile/profile.component.html -->
+<div class="profile-page page-enter" *ngIf="!loading(); else loadingTpl">
+
+  <!-- ══ HERO ══════════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center g-5">
+
+        <!-- LEFT: text -->
+        <div class="col-lg-7 order-2 order-lg-1">
+          <p class="section-label">
+            <i class="bi bi-geo-alt-fill me-1"></i>Dubai, UAE · Open to UAE/GCC
+          </p>
+          <h1 class="hero-name gradient-text">{{ cv().firstName }}<br>{{ cv().lastName }}</h1>
+          <p class="hero-role">
+            <strong>{{ cv().role }}</strong>
+          </p>
+          <p class="hero-summary">12+ years building enterprise solutions across healthcare, insurance, biometric &amp; ERP platforms.</p>
+
+          <div class="hero-meta">
+            <span class="meta-item"><i class="bi bi-geo-alt-fill"></i>{{ cv().address }}</span>
+            <span class="meta-item"><i class="bi bi-telephone-fill"></i>{{ cv().mobileNumber }}</span>
+            <span class="meta-item"><i class="bi bi-envelope-fill"></i>{{ cv().email }}</span>
+          </div>
+
+          <div class="hero-btns">
+            <a [href]="cv().linkedInUrl" target="_blank" class="btn-crystal">
+              <i class="bi bi-linkedin"></i>LinkedIn
+            </a>
+            <a [href]="cv().gitHubUrl" target="_blank" class="btn-crystal btn-amber">
+              <i class="bi bi-github"></i>GitHub
+            </a>
+            <a routerLink="/contact" class="btn-crystal btn-ghost">
+              <i class="bi bi-send"></i>Contact Me
+            </a>
+          </div>
+
+          <div class="availability-pill">
+            <span class="dot-live"></span>
+            Open to full-time roles · Available Immediately
+          </div>
+        </div>
+
+        <!-- RIGHT: avatar + stats -->
+        <div class="col-lg-5 order-1 order-lg-2 text-center">
+          <div class="avatar-ring" style="width:270px;height:270px">
+            <div class="avatar-inner">
+              <img *ngIf="cv().photoUrl; else avatarPlaceholder"
+                   [src]="cv().photoUrl" [alt]="fullName" />
+              <ng-template #avatarPlaceholder>
+                <i class="bi bi-person-fill" style="font-size:7rem;color:rgba(0,212,170,0.4)"></i>
+              </ng-template>
+            </div>
+          </div>
+
+          <div class="stats-row">
+            <div class="stat-mini"><span class="stat-num">12+</span><span class="stat-label">Yrs Exp</span></div>
+            <div class="stat-mini"><span class="stat-num">50+</span><span class="stat-label">Projects</span></div>
+            <div class="stat-mini"><span class="stat-num">6+</span><span class="stat-label">Industries</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SUMMARY ════════════════════════════════════════════ -->
+  <section class="section-padding" style="padding-top:2.5rem">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="section-header">
+            <span class="section-label">About Me</span>
+            <h2 class="section-title">Professional Summary</h2>
+            <div class="section-divider"></div>
+          </div>
+          <p class="summary-text">{{ cv().professionalSummary }}</p>
+        </div>
+        <div class="col-lg-4">
+          <div class="glass-card p-4">
+            <span class="section-label mb-3 d-block">Additional Info</span>
+            <ul class="info-list">
+              <li><i class="bi bi-check-circle-fill text-teal"></i>
+                <span><strong>Availability:</strong> {{ cv().availability }}</span></li>
+              <li><i class="bi bi-check-circle-fill text-teal"></i>
+                <span><strong>Visa:</strong> {{ cv().visaStatus }}</span></li>
+              <li><i class="bi bi-check-circle-fill text-teal"></i>
+                <span><strong>Location:</strong> {{ cv().address }}</span></li>
+              <li><i class="bi bi-check-circle-fill text-teal"></i>
+                <span><strong>Languages:</strong> {{ cv().languages }}</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CORE SKILLS ════════════════════════════════════════ -->
+  <section class="section-padding" style="padding-top:1.5rem">
+    <div class="container">
+      <div class="section-header mb-4">
+        <span class="section-label">Technical Expertise</span>
+        <h2 class="section-title">Core Skills</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="row g-3">
+        <div
+          class="col-lg-6 col-xl-4"
+          *ngFor="let cat of cv().skillCategories; trackBy: trackBySkillCat"
+        >
+          <div class="glass-card p-4 h-100">
+            <p class="skill-cat-title">
+              <i class="bi {{ cat.iconClass }}"></i>{{ cat.name }}
+            </p>
+            <div>
+              <span
+                class="skill-tag"
+                *ngFor="let skill of cat.skills; trackBy: trackBySkill"
+              >{{ skill.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ EXPERIENCE ═════════════════════════════════════════ -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="section-header mb-4">
+        <span class="section-label">Career Journey</span>
+        <h2 class="section-title">Professional Experience</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="timeline">
+        <div
+          class="timeline-item"
+          *ngFor="let exp of cv().experiences; trackBy: trackByExp"
+        >
+          <p class="tl-date">
+            {{ exp.startDate | date:'MMM yyyy' }} –
+            {{ exp.isCurrent ? 'Present' : (exp.endDate | date:'MMM yyyy') }}
+          </p>
+          <p class="tl-company">{{ exp.company }}</p>
+          <p class="tl-role">{{ exp.role }}</p>
+          <p class="tl-loc">
+            <i class="bi bi-geo-alt"></i>{{ exp.location }}
+            <a *ngIf="exp.liveUrl" [href]="exp.liveUrl" target="_blank" class="tl-live-link">
+              <i class="bi bi-box-arrow-up-right"></i>Live
+            </a>
+          </p>
+          <ul class="tl-bullets">
+            <li *ngFor="let b of exp.bullets">{{ b }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CERTIFICATIONS ═════════════════════════════════════ -->
+  <section class="section-padding" style="padding-top:1.5rem">
+    <div class="container">
+      <div class="section-header mb-4">
+        <span class="section-label">Learning & Growth</span>
+        <h2 class="section-title">Certifications, Courses &amp; Training</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="row g-3">
+        <div
+          class="col-lg-4 col-md-6"
+          *ngFor="let cert of cv().certifications; trackBy: trackByCert"
+        >
+          <div class="cert-card glass-card p-4">
+            <div class="cert-icon"><i class="bi {{ cert.iconClass }}"></i></div>
+            <p class="cert-name">{{ cert.name }}</p>
+            <p class="cert-org">{{ cert.organization }}</p>
+            <p class="cert-date">
+              <span *ngIf="cert.isInProgress" class="badge-teal">
+                <span class="dot-live"></span>In Progress
+              </span>
+              <span *ngIf="!cert.isInProgress">
+                <i class="bi bi-calendar3 me-1"></i>{{ cert.dateRange }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ EDUCATION ══════════════════════════════════════════ -->
+  <section class="section-padding" style="padding-top:1.5rem">
+    <div class="container">
+      <div class="section-header mb-4">
+        <span class="section-label">Academic Background</span>
+        <h2 class="section-title">Education</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="row g-4">
+        <div
+          class="col-md-6"
+          *ngFor="let edu of cv().educations; trackBy: trackByEdu"
+        >
+          <div class="glass-card p-4 d-flex gap-3">
+            <div class="edu-icon"><i class="bi bi-mortarboard-fill"></i></div>
+            <div>
+              <p class="edu-year">{{ edu.startYear }} – {{ edu.endYear }}</p>
+              <p class="edu-degree">{{ edu.degree }}</p>
+              <p class="edu-inst text-amber">{{ edu.institution }}</p>
+              <p class="edu-loc text-sub">{{ edu.location }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SOFT SKILLS ════════════════════════════════════════ -->
+  <section class="section-padding" style="padding-top:1.5rem;padding-bottom:6rem">
+    <div class="container">
+      <div class="section-header mb-4">
+        <span class="section-label">Beyond Technical</span>
+        <h2 class="section-title">Soft Skills</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div>
+        <span
+          class="soft-pill"
+          *ngFor="let ss of cv().softSkills"
+        >
+          <i class="bi {{ ss.iconClass }}"></i>{{ ss.name }}
+        </span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Loading skeleton -->
+<ng-template #loadingTpl>
+  <div class="container" style="padding:5rem 0">
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="skeleton mb-3" style="height:14px;width:30%"></div>
+        <div class="skeleton mb-3" style="height:60px;width:75%"></div>
+        <div class="skeleton mb-2" style="height:20px;width:60%"></div>
+        <div class="skeleton" style="height:16px;width:50%"></div>
+      </div>
+      <div class="col-lg-5">
+        <div class="skeleton mx-auto" style="width:260px;height:260px;border-radius:50%"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="container text-center">
+    <p>© {{ 2026 }} <a [href]="cv().portfolioUrl" target="_blank">Sreemonta Bhowmik</a> · Built with Angular 18 + .NET 10 API</p>
+    <p class="mt-1" style="font-size:0.7rem;color:var(--text-sub)">Dubai, UAE · {{ cv().email }} · {{ cv().mobileNumber }}</p>
+  </div>
+</footer>

@@ -1,0 +1,17 @@
+/* src/app/features/projects/projects.component.scss */
+.project-title { font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.5rem; }
+.project-desc  { font-size:0.82rem; color:var(--text-sub); line-height:1.65; flex:1; margin-bottom:0.75rem; }
+.project-tags  { min-height:48px; }
+
+.add-card {
+  border-style: dashed !important;
+  .add-inner {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 3rem 1.5rem; text-align: center;
+    gap: 0.5rem;
+    i { font-size: 2.8rem; color: rgba(0,212,170,0.3); }
+    p { font-size: 0.88rem; font-weight: 600; color: var(--text-sub); margin: 0; }
+  }
+  &:hover { border-color: rgba(0,212,170,0.5) !important; }
+}

@@ -1,0 +1,106 @@
+<!-- src/app/admin/blog-manager/post-list/post-list.component.html -->
+<div class="admin-page-wrap">
+
+  <div class="page-head">
+    <div>
+      <h2 class="page-title">Blog Posts</h2>
+      <p class="page-sub">Create, edit, publish and delete blog articles.</p>
+    </div>
+    <a routerLink="/admin/blog/posts/new" class="btn-crystal btn-amber">
+      <i class="bi bi-pencil-square"></i>New Post
+    </a>
+  </div>
+
+  <!-- Filter tabs -->
+  <div class="filter-tabs mb-4">
+    <button class="filter-tab" [class.active]="filter()==='all'"       (click)="filter.set('all')">
+      All <span>{{ posts().length }}</span>
+    </button>
+    <button class="filter-tab" [class.active]="filter()==='published'" (click)="filter.set('published')">
+      Published <span>{{ posts().filter(p => !!p.publishedAt).length }}</span>
+    </button>
+    <button class="filter-tab" [class.active]="filter()==='draft'"     (click)="filter.set('draft')">
+      Drafts <span>{{ posts().filter(p => !p.publishedAt).length }}</span>
+    </button>
+  </div>
+
+  <div class="glass-card p-4" *ngIf="!loading(); else loadTpl">
+
+    <div *ngIf="filteredPosts().length === 0" class="empty-state">
+      <i class="bi bi-file-earmark-text"></i>
+      <p>No posts found.</p>
+      <a routerLink="/admin/blog/posts/new" class="btn-crystal btn-sm mt-2">
+        <i class="bi bi-plus"></i>Create First Post
+      </a>
+    </div>
+
+    <table class="admin-table" *ngIf="filteredPosts().length > 0">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Topic</th>
+          <th>Published</th>
+          <th>Reactions</th>
+          <th>Comments</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of filteredPosts(); trackBy: trackByPost">
+          <td>
+            <div>
+              <strong style="color:#fff;font-size:0.85rem;line-height:1.4">{{ p.title }}</strong>
+              <p style="font-size:0.72rem;color:var(--text-sub);margin:0">{{ p.slug }}</p>
+            </div>
+          </td>
+          <td>
+            <span class="badge-teal" [style.color]="p.topicColorHex" [style.border-color]="p.topicColorHex + '40'">
+              {{ p.topicName }}
+            </span>
+          </td>
+          <td>
+            <span *ngIf="p.publishedAt" style="font-size:0.8rem;color:var(--teal)">
+              <i class="bi bi-check-circle me-1"></i>{{ p.publishedAt | date:'MMM d, y' }}
+            </span>
+            <span *ngIf="!p.publishedAt" style="font-size:0.78rem;color:var(--amber)">
+              <i class="bi bi-pencil me-1"></i>Draft
+            </span>
+          </td>
+          <td>
+            <span style="font-size:0.8rem;color:var(--text-sub)">
+              <i class="bi bi-hand-thumbs-up text-teal me-1"></i>{{ p.likeCount }}
+              <i class="bi bi-hand-thumbs-down ms-2 me-1" style="color:#f87171"></i>{{ p.dislikeCount }}
+            </span>
+          </td>
+          <td style="color:var(--text-sub);font-size:0.82rem">
+            <i class="bi bi-chat me-1"></i>{{ p.commentCount }}
+          </td>
+          <td>
+            <div class="d-flex gap-1">
+              <a [routerLink]="['/admin/blog/posts/edit', p.id]" class="btn-crystal btn-sm">
+                <i class="bi bi-pencil"></i>
+              </a>
+              <button
+                *ngIf="!p.publishedAt"
+                class="btn-crystal btn-amber btn-sm"
+                (click)="publish(p.id)"
+              >
+                <i class="bi bi-send"></i>Publish
+              </button>
+              <button class="btn-crystal btn-danger-crystal btn-sm" (click)="delete(p.id, p.title)">
+                <i class="bi bi-trash3"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #loadTpl>
+    <div class="glass-card p-4">
+      <div *ngFor="let i of [1,2,3,4]" class="skeleton mb-2" style="height:55px;border-radius:10px"></div>
+    </div>
+  </ng-template>
+
+</div>

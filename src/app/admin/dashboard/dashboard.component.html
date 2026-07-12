@@ -1,0 +1,65 @@
+<!-- src/app/admin/dashboard/dashboard.component.html -->
+<div class="dashboard">
+
+  <!-- Header -->
+  <div class="dash-header">
+    <div>
+      <h1 class="dash-title">Dashboard</h1>
+      <p class="dash-sub">Managing portfolio: <strong class="text-teal">{{ appId }}</strong></p>
+    </div>
+    <a routerLink="/admin/blog/posts/new" class="btn-crystal btn-amber">
+      <i class="bi bi-pencil-square"></i>New Post
+    </a>
+  </div>
+
+  <!-- Stats row -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-3 col-md-6" *ngFor="let stat of stats()">
+      <a [routerLink]="stat.path" class="stat-card glass-card p-4 d-block text-decoration-none">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <p class="stat-label">{{ stat.label }}</p>
+            <p class="stat-value" [style.color]="stat.color">{{ stat.value }}</p>
+          </div>
+          <div class="stat-icon" [style.background]="stat.color + '18'" [style.border-color]="stat.color + '30'">
+            <i class="bi {{ stat.icon }}" [style.color]="stat.color"></i>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Quick links + Activity -->
+  <div class="row g-4">
+
+    <!-- Quick links -->
+    <div class="col-lg-5">
+      <div class="glass-card p-4">
+        <p class="card-section-title"><i class="bi bi-lightning-charge-fill text-amber me-2"></i>Quick Actions</p>
+        <div class="row g-2">
+          <div class="col-6" *ngFor="let ql of quickLinks">
+            <a [routerLink]="ql.path" class="quick-link glass-card p-3">
+              <i class="bi {{ ql.icon }}" [style.color]="ql.color"></i>
+              <span>{{ ql.label }}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="col-lg-7">
+      <div class="glass-card p-4">
+        <p class="card-section-title"><i class="bi bi-activity text-teal me-2"></i>Recent Activity</p>
+        <div *ngFor="let act of activity(); let last = last">
+          <div class="activity-row" [class.border-0]="last">
+            <span class="act-type" [style.color]="act.typeColor" [style.border-color]="act.typeColor + '40'">{{ act.type }}</span>
+            <span class="act-msg text-sub" [innerHTML]="act.msg"></span>
+            <span class="act-time">{{ act.time }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,208 @@
+<!-- src/app/features/blog/blog-post/blog-post.component.html -->
+
+<!-- Loading -->
+<div class="container post-wrap" *ngIf="loading()">
+  <div class="skeleton mb-3" style="height:14px;width:20%"></div>
+  <div class="skeleton mb-3" style="height:52px;width:75%"></div>
+  <div class="skeleton mb-4" style="height:18px;width:40%"></div>
+  <div class="skeleton" style="height:400px"></div>
+</div>
+
+<!-- Not found -->
+<div class="container post-wrap text-center" *ngIf="notFound() && !loading()" style="padding:5rem 1rem">
+  <i class="bi bi-file-earmark-x" style="font-size:4rem;color:rgba(0,212,170,0.2);display:block;margin-bottom:1rem"></i>
+  <h2 style="color:#fff;font-family:'Playfair Display',serif">Post Not Found</h2>
+  <p style="color:var(--text-sub)">The article you're looking for doesn't exist or has been removed.</p>
+  <a routerLink="/blog" class="btn-crystal mt-3"><i class="bi bi-arrow-left"></i>Back to Blog</a>
+</div>
+
+<!-- Post content -->
+<div class="page-enter" *ngIf="post() && !loading()">
+  <div class="container post-wrap">
+
+    <!-- Back -->
+    <a routerLink="/blog" class="back-link">
+      <i class="bi bi-arrow-left"></i>Back to Blog
+    </a>
+
+    <!-- Header -->
+    <header class="post-header">
+      <span class="topic-badge-lg"
+            [style.color]="post()!.topicColorHex"
+            [style.border-color]="post()!.topicColorHex + '45'">
+        {{ post()!.topicName }}
+      </span>
+
+      <h1 class="post-title">{{ post()!.title }}</h1>
+
+      <div class="post-meta-bar">
+        <span><i class="bi bi-calendar3"></i>{{ post()!.publishedAt | date:'MMMM d, y' }}</span>
+        <span><i class="bi bi-clock"></i>{{ post()!.readTimeMin }} min read</span>
+        <span><i class="bi bi-chat"></i>{{ post()!.commentCount }} comments</span>
+        <span *ngIf="post()!.isFeatured" class="badge-amber">
+          <i class="bi bi-star-fill"></i>Featured
+        </span>
+      </div>
+
+      <p class="post-excerpt">{{ post()!.excerpt }}</p>
+    </header>
+
+    <div class="row g-4">
+      <!-- Main body -->
+      <div class="col-lg-8">
+
+        <!-- Article body -->
+        <div class="post-body" [innerHTML]="post()!.body || '<p>Full article content coming soon…</p>'"></div>
+
+        <!-- Attachments -->
+        <div class="attachments-section" *ngIf="post()!.attachments?.length">
+          <p class="attach-title"><i class="bi bi-paperclip text-teal me-2"></i>Attachments</p>
+          <div class="attach-grid">
+            <a
+              *ngFor="let att of post()!.attachments"
+              [href]="att.fileUrl"
+              target="_blank"
+              class="attach-item"
+            >
+              <i class="bi {{ getFileIcon(att.fileType) }}" [style.color]="getFileColor(att.fileType)"></i>
+              <div class="attach-info">
+                <span class="attach-name">{{ att.fileName }}</span>
+                <span class="attach-size">{{ att.fileSizeKb }} KB</span>
+              </div>
+              <i class="bi bi-download" style="color:var(--text-sub);font-size:0.9rem;margin-left:auto"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Reactions -->
+        <div class="reactions-section">
+          <p class="reactions-title">Was this article helpful?</p>
+          <div class="reactions-row">
+            <button
+              *ngFor="let r of emojiMap"
+              class="reaction-big"
+              [class.reacted]="userReacted().has(r.label)"
+              (click)="react(r.label)"
+            >
+              <span class="reaction-emoji">{{ r.emoji }}</span>
+              <span class="reaction-label">{{ r.label | titlecase }}</span>
+              <span class="reaction-count">{{ getReactionCount(r.label) }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Comments -->
+        <div class="comments-section">
+          <p class="comments-title">
+            <i class="bi bi-chat-dots-fill text-teal me-2"></i>
+            Comments ({{ post()!.commentCount }})
+          </p>
+
+          <!-- Comment list -->
+          <div
+            class="comment-item"
+            *ngFor="let c of post()!.comments"
+          >
+            <div class="comment-avatar">{{ c.authorName.charAt(0).toUpperCase() }}</div>
+            <div class="comment-body">
+              <div class="comment-meta">
+                <strong>{{ c.authorName }}</strong>
+                <span>{{ c.createdAt | date:'MMM d, y' }}</span>
+              </div>
+              <p class="comment-text">{{ c.body }}</p>
+            </div>
+          </div>
+
+          <div *ngIf="!post()!.comments?.length" style="color:var(--text-sub);font-size:0.85rem;padding:1rem 0">
+            No comments yet. Be the first to share your thoughts!
+          </div>
+
+          <!-- Comment form -->
+          <div class="comment-form-wrap" *ngIf="!submitted()">
+            <p class="cf-title">Leave a Comment</p>
+            <form [formGroup]="commentForm" (ngSubmit)="submitComment()">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label-crystal">Name *</label>
+                  <input type="text" class="form-control-crystal" formControlName="authorName" placeholder="Your name" />
+                  <div class="field-err" *ngIf="commentForm.get('authorName')?.invalid && commentForm.get('authorName')?.touched">
+                    Name is required
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label-crystal">Email (optional)</label>
+                  <input type="email" class="form-control-crystal" formControlName="authorEmail" placeholder="your@email.com" />
+                </div>
+                <div class="col-12">
+                  <label class="form-label-crystal">Comment *</label>
+                  <textarea class="form-control-crystal" formControlName="body"
+                    placeholder="Share your thoughts…" style="min-height:110px"></textarea>
+                  <div class="field-err" *ngIf="commentForm.get('body')?.invalid && commentForm.get('body')?.touched">
+                    Comment is required
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-3 mt-3">
+                <button type="submit" class="btn-crystal" [disabled]="submitting()">
+                  <span *ngIf="!submitting()"><i class="bi bi-send"></i>Post Comment</span>
+                  <span *ngIf="submitting()"><i class="bi bi-arrow-repeat spin"></i>Posting…</span>
+                </button>
+                <p style="font-size:0.73rem;color:var(--text-sub);margin:0">
+                  Comments are reviewed before publishing.
+                </p>
+              </div>
+            </form>
+          </div>
+
+          <!-- Submitted confirmation -->
+          <div class="submitted-msg" *ngIf="submitted()">
+            <i class="bi bi-check-circle-fill text-teal"></i>
+            <div>
+              <strong style="color:#fff">Comment submitted!</strong>
+              <p style="font-size:0.8rem;color:var(--text-sub);margin:0">Your comment is under review and will appear shortly.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <div class="sidebar-widget sticky-top" style="top:90px">
+          <p class="widget-title"><i class="bi bi-info-circle"></i>About this Post</p>
+          <ul style="list-style:none;padding:0;margin:0;font-size:0.82rem;color:var(--text-sub)">
+            <li class="mb-2"><i class="bi bi-tag text-teal me-2"></i>{{ post()!.topicName }}</li>
+            <li class="mb-2"><i class="bi bi-calendar3 text-teal me-2"></i>{{ post()!.publishedAt | date:'MMMM d, y' }}</li>
+            <li class="mb-2"><i class="bi bi-clock text-teal me-2"></i>{{ post()!.readTimeMin }} min read</li>
+            <li><i class="bi bi-chat text-teal me-2"></i>{{ post()!.commentCount }} comments</li>
+          </ul>
+
+          <div class="mt-3 pt-3" style="border-top:1px solid var(--border)">
+            <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-sub);margin-bottom:0.75rem">Share</p>
+            <div class="d-flex gap-2">
+              <a class="btn-crystal btn-sm" style="border-color:rgba(10,102,194,0.4);color:#4a9eff"
+                 [href]="'https://linkedin.com/sharing/share-offsite/?url=' + encodeURI(post()!.slug)"
+                 target="_blank">
+                <i class="bi bi-linkedin"></i>
+              </a>
+              <a class="btn-crystal btn-sm"
+                 [href]="'https://twitter.com/intent/tweet?text=' + encodeURI(post()!.title)"
+                 target="_blank">
+                <i class="bi bi-twitter-x"></i>
+              </a>
+              <button class="btn-crystal btn-sm btn-ghost" title="Copy link">
+                <i class="bi bi-link-45deg"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <a routerLink="/blog" class="btn-crystal btn-ghost btn-full">
+            <i class="bi bi-arrow-left"></i>All Articles
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

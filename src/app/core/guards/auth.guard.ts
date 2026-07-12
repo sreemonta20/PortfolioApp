@@ -1,0 +1,15 @@
+// ============================================================
+// src/app/core/guards/auth.guard.ts
+// Protects all /admin/** routes. Public routes are untouched.
+// ============================================================
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+
+export const authGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  if (auth.isLoggedIn()) return true;
+  router.navigate(['/admin/login']);
+  return false;
+};

@@ -1,0 +1,14 @@
+/* src/app/features/contact/contact.component.scss */
+.contact-page { padding: 4rem 0 6rem; }
+.contact-hero {
+  text-align: center; padding-bottom: 1rem;
+  .section-divider { margin: 0 auto; }
+}
+.contact-sub {
+  font-size: 0.93rem; color: var(--text-sub);
+  max-width: 480px; margin: 0 auto;
+  line-height: 1.7;
+}
+.contact-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-sub); margin-bottom: 0.4rem; }
+.contact-value { font-size: 0.9rem; font-weight: 600; a { font-size: inherit; } }
+.location-bar  { font-size: 0.85rem; color: var(--text-sub); strong { color: var(--text-main); } }

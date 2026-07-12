@@ -1,0 +1,66 @@
+<!-- src/app/admin/login/admin-login.component.html -->
+<div class="login-page">
+  <div class="login-card glass-card">
+
+    <div class="login-brand">
+      <span class="brand-text">SB<span class="brand-dot">.</span></span>
+      <p class="brand-sub">Admin Panel</p>
+    </div>
+
+    <h2 class="login-title">Sign In</h2>
+    <p class="login-sub">Use your ERP admin credentials to access the Portfolio Management module.</p>
+
+    <div class="alert-error" *ngIf="error()">
+      <i class="bi bi-exclamation-triangle-fill"></i>{{ error() }}
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="mb-3">
+        <label class="form-label-crystal">Username</label>
+        <input
+          type="text"
+          class="form-control-crystal"
+          formControlName="username"
+          placeholder="admin"
+          autocomplete="username"
+        />
+        <div class="field-error" *ngIf="form.get('username')?.invalid && form.get('username')?.touched">
+          Username is required
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label-crystal">Password</label>
+        <div class="pass-wrap">
+          <input
+            [type]="showPass() ? 'text' : 'password'"
+            class="form-control-crystal"
+            formControlName="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          />
+          <button type="button" class="pass-toggle" (click)="togglePass()">
+            <i class="bi" [class.bi-eye]="!showPass()" [class.bi-eye-slash]="showPass()"></i>
+          </button>
+        </div>
+        <div class="field-error" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+          Password is required
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="btn-crystal btn-full btn-lg"
+        [disabled]="loading()"
+      >
+        <span *ngIf="!loading()"><i class="bi bi-shield-lock"></i>Sign In</span>
+        <span *ngIf="loading()"><i class="bi bi-arrow-repeat spin"></i>Authenticating…</span>
+      </button>
+    </form>
+
+    <p class="login-note">
+      <i class="bi bi-info-circle me-1"></i>
+      This panel is for portfolio administration only. Role: <strong>Admin</strong> or <strong>PortfolioManager</strong> required.
+    </p>
+  </div>
+</div>

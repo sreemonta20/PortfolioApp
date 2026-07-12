@@ -1,0 +1,158 @@
+<!-- src/app/features/blog/blog-list/blog-list.component.html -->
+<div class="blog-page page-enter">
+  <div class="container" style="padding:3.5rem 0 5rem">
+
+    <!-- ══ HERO ══ -->
+    <div class="blog-hero">
+      <div class="featured-badge">
+        <i class="bi bi-stars"></i>Tech Blog
+      </div>
+      <h1 class="blog-hero-title">Thoughts on Software Engineering<br>&amp; Modern Development</h1>
+      <p class="blog-hero-sub">Deep dives into .NET, Angular, cloud architecture, and real-world enterprise patterns — written from 12+ years on the front lines.</p>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- ══ MAIN ══ -->
+      <div class="col-lg-8">
+
+        <!-- Search -->
+        <div class="mb-3">
+          <div class="search-wrap">
+            <i class="bi bi-search search-icon"></i>
+            <input
+              type="text"
+              class="form-control-crystal rounded-pill"
+              placeholder="Search articles…"
+              (input)="onSearch($any($event.target).value)"
+              style="padding-left:2.5rem"
+            />
+          </div>
+        </div>
+
+        <!-- Topic Chips -->
+        <div class="topic-chips mb-4">
+          <span
+            class="topic-chip"
+            [class.active]="!activeTopic()"
+            (click)="filterByTopic(undefined)"
+          >
+            <i class="bi bi-grid-fill"></i>All
+            <span class="chip-count">{{ allPosts().length }}</span>
+          </span>
+          <span
+            class="topic-chip"
+            *ngFor="let t of topics(); trackBy: trackByTopic"
+            [class.active]="activeTopic() === t.slug"
+            (click)="filterByTopic(t.slug)"
+          >
+            <i class="bi {{ t.iconClass }}"></i>{{ t.name }}
+            <span class="chip-count">{{ getTopicPostCount(t.slug) }}</span>
+          </span>
+        </div>
+
+        <!-- Posts grid -->
+        <div class="row g-3" *ngIf="filteredPosts().length > 0; else noPosts">
+          <div
+            class="col-md-6"
+            *ngFor="let post of filteredPosts(); trackBy: trackByPost"
+          >
+            <div class="blog-post-card">
+              <!-- Thumb -->
+              <div class="post-thumb" [style.background]="'linear-gradient(135deg, #0d1e2e, #152035)'">
+                <i class="bi bi-file-text"></i>
+                <span class="topic-badge" [style.color]="post.topicColorHex" [style.border-color]="post.topicColorHex + '50'">
+                  {{ post.topicName }}
+                </span>
+              </div>
+              <!-- Body -->
+              <div class="post-body">
+                <div class="post-meta">
+                  <span><i class="bi bi-calendar3"></i>{{ post.publishedAt | date:'MMM d, y' }}</span>
+                  <span><i class="bi bi-clock"></i>{{ post.readTimeMin }} min read</span>
+                </div>
+                <p class="post-title">{{ post.title }}</p>
+                <p class="post-excerpt">{{ post.excerpt }}</p>
+                <div class="post-footer">
+                  <div class="d-flex gap-2">
+                    <span
+                      class="reaction-btn"
+                      [class.liked]="isLiked(post.id)"
+                      (click)="toggleLike(post)"
+                    >
+                      <i class="bi" [class.bi-hand-thumbs-up-fill]="isLiked(post.id)" [class.bi-hand-thumbs-up]="!isLiked(post.id)"></i>
+                      {{ post.likeCount }}
+                    </span>
+                    <span class="reaction-btn">
+                      <i class="bi bi-chat"></i>{{ post.commentCount }}
+                    </span>
+                  </div>
+                  <a [routerLink]="['/blog', post.slug]" class="btn-crystal btn-sm">
+                    Read <i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #noPosts>
+          <div class="empty-state">
+            <i class="bi bi-journal-x"></i>
+            <p>No articles found for this topic yet.</p>
+            <p class="text-sub" style="font-size:0.82rem">Check back soon or browse another topic.</p>
+          </div>
+        </ng-template>
+
+      </div><!-- /col-lg-8 -->
+
+      <!-- ══ SIDEBAR ══ -->
+      <div class="col-lg-4">
+
+        <!-- Topics widget -->
+        <div class="sidebar-widget">
+          <p class="widget-title"><i class="bi bi-tags"></i>Topics</p>
+          <div
+            class="sidebar-topic-row"
+            *ngFor="let t of topics(); trackBy: trackByTopic"
+            (click)="filterByTopic(t.slug)"
+            [class.active]="activeTopic() === t.slug"
+          >
+            <span><i class="bi {{ t.iconClass }} me-2"></i>{{ t.name }}</span>
+            <span class="topic-count">{{ getTopicPostCount(t.slug) }}</span>
+          </div>
+        </div>
+
+        <!-- Popular posts -->
+        <div class="sidebar-widget">
+          <p class="widget-title"><i class="bi bi-fire"></i>Most Popular</p>
+          <div
+            class="popular-item"
+            *ngFor="let p of popularPosts(); let last = last"
+            [class.border-0]="last"
+            [routerLink]="['/blog', p.slug]"
+          >
+            <p class="popular-title">{{ p.title }}</p>
+            <p class="popular-meta">
+              <i class="bi bi-hand-thumbs-up-fill text-teal"></i> {{ p.likeCount }} likes ·
+              <i class="bi bi-chat text-sub"></i> {{ p.commentCount }} comments
+            </p>
+          </div>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="sidebar-widget newsletter-widget">
+          <p class="widget-title"><i class="bi bi-bell"></i>Newsletter</p>
+          <p style="font-size:0.79rem;color:var(--text-sub);margin-bottom:1rem">
+            Get new articles delivered to your inbox. No spam, ever.
+          </p>
+          <input type="email" class="form-control-crystal rounded-pill mb-2" placeholder="your@email.com" />
+          <button class="btn-crystal btn-full">
+            <i class="bi bi-send"></i>Subscribe
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+.footer-custom {
+  padding: 2.5rem 0;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--text-sub, #9aa6b8);
+  font-size: 0.85rem;
+
+  a {
+    color: var(--teal, #00d4aa);
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.footer-sub {
+  font-size: 0.72rem;
+  opacity: 0.8;
+}

@@ -1,0 +1,74 @@
+<!-- src/app/admin/layout/admin-layout.component.html -->
+<div class="admin-shell" [class.sidebar-collapsed]="!sidebarOpen()">
+
+  <!-- ══ SIDEBAR ══════════════════════════════════════════ -->
+  <aside class="admin-sidebar" [class.open]="sidebarOpen()">
+
+    <div class="sidebar-brand">
+      <span>SB<span>.</span></span>
+      <span class="sidebar-brand-label">Portfolio Admin</span>
+    </div>
+
+    <!-- App ID badge -->
+    <div class="appid-badge">
+      <span class="appid-label">App ID</span>
+      <span class="appid-value">{{ appId }}</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div *ngFor="let group of navGroups">
+        <p class="nav-section-title">{{ group.title }}</p>
+        <a
+          *ngFor="let link of group.links"
+          class="sidebar-link"
+          [routerLink]="link.path"
+          [class.active]="isActive(link.path)"
+          [target]="link.external ? '_blank' : '_self'"
+        >
+          <i class="bi {{ link.icon }}"></i>
+          <span>{{ link.label }}</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-avatar"><i class="bi bi-person-fill"></i></div>
+        <div class="user-info">
+          <span class="user-name">{{ username }}</span>
+          <span class="user-role">Admin</span>
+        </div>
+        <button class="logout-btn" (click)="logout()" title="Sign Out">
+          <i class="bi bi-box-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Overlay for mobile -->
+  <div class="sidebar-overlay" *ngIf="sidebarOpen()" (click)="toggleSidebar()"></div>
+
+  <!-- ══ MAIN AREA ═════════════════════════════════════════ -->
+  <div class="admin-main">
+    <!-- Topbar -->
+    <div class="admin-topbar">
+      <button class="topbar-toggle" (click)="toggleSidebar()">
+        <i class="bi bi-list"></i>
+      </button>
+      <div class="topbar-breadcrumb">
+        <i class="bi bi-shield-lock text-teal me-2"></i>
+        <span style="font-size:0.82rem;color:var(--text-sub)">Portfolio Management</span>
+      </div>
+      <div class="topbar-right">
+        <a routerLink="/profile" target="_blank" class="btn-crystal btn-ghost btn-sm">
+          <i class="bi bi-box-arrow-up-right"></i>View Site
+        </a>
+      </div>
+    </div>
+
+    <!-- Routed content -->
+    <div class="admin-content page-enter">
+      <router-outlet />
+    </div>
+  </div>
+</div>

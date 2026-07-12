@@ -1,0 +1,167 @@
+<!-- src/app/admin/cv-manager/cv-manager.component.html -->
+<div class="admin-page-wrap" *ngIf="!loading(); else loadTpl" style="max-width:860px">
+
+  <div class="page-head mb-4">
+    <div>
+      <h2 class="page-title">CV & Profile</h2>
+      <p class="page-sub">Update your CV data, photo, and professional information displayed on the portfolio.</p>
+    </div>
+    <div *ngIf="saved()" class="save-badge">
+      <i class="bi bi-check-circle-fill text-teal"></i> Saved successfully!
+    </div>
+  </div>
+
+  <!-- Tab nav -->
+  <div class="cv-tabs mb-4">
+    <button class="cv-tab" [class.active]="activeTab()==='profile'"    (click)="activeTab.set('profile')">
+      <i class="bi bi-person"></i>Profile
+    </button>
+    <button class="cv-tab" [class.active]="activeTab()==='experience'" (click)="activeTab.set('experience')">
+      <i class="bi bi-briefcase"></i>Experience
+    </button>
+    <button class="cv-tab" [class.active]="activeTab()==='skills'"     (click)="activeTab.set('skills')">
+      <i class="bi bi-code-slash"></i>Skills
+    </button>
+    <button class="cv-tab" [class.active]="activeTab()==='certs'"      (click)="activeTab.set('certs')">
+      <i class="bi bi-award"></i>Certifications
+    </button>
+    <button class="cv-tab" [class.active]="activeTab()==='education'"  (click)="activeTab.set('education')">
+      <i class="bi bi-mortarboard"></i>Education
+    </button>
+  </div>
+
+  <!-- Profile Tab -->
+  <div *ngIf="activeTab()==='profile'">
+    <form [formGroup]="form" (ngSubmit)="saveProfile()">
+      <div class="row g-4">
+
+        <!-- Photo upload -->
+        <div class="col-12">
+          <div class="glass-card p-4">
+            <p class="settings-title"><i class="bi bi-image text-teal me-2"></i>Profile Photo</p>
+            <div class="d-flex align-items-center gap-4 flex-wrap">
+              <div class="photo-preview">
+                <img *ngIf="photoPreview()" [src]="photoPreview()" alt="Preview" />
+                <i *ngIf="!photoPreview()" class="bi bi-person-fill"></i>
+              </div>
+              <div>
+                <label class="btn-crystal btn-sm" style="cursor:pointer">
+                  <i class="bi bi-upload"></i>Upload Photo
+                  <input type="file" hidden accept="image/*" (change)="onPhotoChange($event)" />
+                </label>
+                <p style="font-size:0.75rem;color:var(--text-sub);margin-top:0.5rem">JPG, PNG or WebP · Max 2MB</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Basic info -->
+        <div class="col-12">
+          <div class="glass-card p-4">
+            <p class="settings-title"><i class="bi bi-person text-teal me-2"></i>Basic Information</p>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label-crystal">First Name *</label>
+                <input type="text" class="form-control-crystal" formControlName="firstName" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label-crystal">Last Name *</label>
+                <input type="text" class="form-control-crystal" formControlName="lastName" />
+              </div>
+              <div class="col-12">
+                <label class="form-label-crystal">Role / Title *</label>
+                <input type="text" class="form-control-crystal" formControlName="role" placeholder="Senior Full-Stack Developer…" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label-crystal">Email *</label>
+                <input type="email" class="form-control-crystal" formControlName="email" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label-crystal">Mobile Number</label>
+                <input type="text" class="form-control-crystal" formControlName="mobileNumber" placeholder="+971…" />
+              </div>
+              <div class="col-12">
+                <label class="form-label-crystal">Address / Location</label>
+                <input type="text" class="form-control-crystal" formControlName="address" placeholder="Dubai, UAE" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Links -->
+        <div class="col-12">
+          <div class="glass-card p-4">
+            <p class="settings-title"><i class="bi bi-link-45deg text-teal me-2"></i>Social & Links</p>
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label-crystal"><i class="bi bi-linkedin me-1" style="color:#0a66c2"></i>LinkedIn URL</label>
+                <input type="url" class="form-control-crystal" formControlName="linkedInUrl" placeholder="https://linkedin.com/in/…" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label-crystal"><i class="bi bi-github me-1"></i>GitHub URL</label>
+                <input type="url" class="form-control-crystal" formControlName="gitHubUrl" placeholder="https://github.com/…" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label-crystal"><i class="bi bi-globe me-1 text-teal"></i>Portfolio URL</label>
+                <input type="url" class="form-control-crystal" formControlName="portfolioUrl" placeholder="https://…" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary & Additional -->
+        <div class="col-12">
+          <div class="glass-card p-4">
+            <p class="settings-title"><i class="bi bi-file-person text-teal me-2"></i>Summary & Info</p>
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label-crystal">Professional Summary</label>
+                <textarea class="form-control-crystal" formControlName="professionalSummary" style="min-height:130px"></textarea>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label-crystal">Availability</label>
+                <input type="text" class="form-control-crystal" formControlName="availability" placeholder="Immediate" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label-crystal">Visa Status</label>
+                <input type="text" class="form-control-crystal" formControlName="visaStatus" placeholder="Spouse visa…" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label-crystal">Languages</label>
+                <input type="text" class="form-control-crystal" formControlName="languages" placeholder="English, Hindi…" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <button type="submit" class="btn-crystal btn-amber" [disabled]="saving()">
+            <i class="bi" [class.bi-floppy]="!saving()" [class.bi-arrow-repeat]="saving()" [class.spin]="saving()"></i>
+            {{ saving() ? 'Saving…' : 'Save Changes' }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Other tabs - placeholder -->
+  <div *ngIf="activeTab() !== 'profile'" class="glass-card p-5 text-center">
+    <i class="bi bi-tools" style="font-size:3rem;color:rgba(0,212,170,0.2);display:block;margin-bottom:1rem"></i>
+    <p style="color:var(--text-sub)">
+      <strong style="color:#fff">{{ activeTab() | titlecase }}</strong> management is available via the API.
+      Use the dedicated endpoints to add, update, or remove entries for this section.
+    </p>
+    <p style="font-size:0.8rem;color:var(--text-sub);margin-top:0.5rem">
+      Full inline CRUD forms for Experience, Skills, Certifications and Education can be added in the next sprint.
+    </p>
+  </div>
+
+</div>
+
+<ng-template #loadTpl>
+  <div style="padding:2rem 0">
+    <div class="skeleton mb-3" style="height:40px;width:25%"></div>
+    <div class="skeleton mb-3" style="height:220px"></div>
+    <div class="skeleton" style="height:160px"></div>
+  </div>
+</ng-template>

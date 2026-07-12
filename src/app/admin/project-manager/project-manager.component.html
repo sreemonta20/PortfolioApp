@@ -1,0 +1,148 @@
+<!-- src/app/admin/project-manager/project-manager.component.html -->
+<div class="admin-page-wrap" style="max-width:960px">
+
+  <div class="page-head mb-4">
+    <div>
+      <h2 class="page-title">Projects</h2>
+      <p class="page-sub">Manage portfolio projects displayed on the Projects page.</p>
+    </div>
+    <button class="btn-crystal btn-amber" (click)="openNew()">
+      <i class="bi bi-plus-lg"></i>Add Project
+    </button>
+  </div>
+
+  <!-- Form panel -->
+  <div class="form-panel glass-card mb-4" *ngIf="showForm()">
+    <div class="form-panel-head">
+      <p class="form-panel-title">
+        <i class="bi bi-grid-fill text-teal me-2"></i>
+        {{ editId() ? 'Edit Project' : 'New Project' }}
+      </p>
+      <button class="close-btn" (click)="cancel()"><i class="bi bi-x-lg"></i></button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="save()" class="p-4">
+      <div class="row g-3">
+
+        <div class="col-12">
+          <label class="form-label-crystal">Project Title *</label>
+          <input type="text" class="form-control-crystal" formControlName="title" placeholder="e.g. Dubai Health Charity Portal" />
+          <div class="field-err" *ngIf="form.get('title')?.invalid && form.get('title')?.touched">Title is required</div>
+        </div>
+
+        <div class="col-12">
+          <label class="form-label-crystal">Description *</label>
+          <textarea class="form-control-crystal" formControlName="description"
+            placeholder="Describe the project, tech stack, and key outcomes…"
+            style="min-height:100px"></textarea>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label-crystal">Live URL</label>
+          <input type="url" class="form-control-crystal" formControlName="liveUrl" placeholder="https://…" />
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label-crystal">Repository URL</label>
+          <input type="url" class="form-control-crystal" formControlName="repoUrl" placeholder="https://github.com/…" />
+        </div>
+
+        <div class="col-12">
+          <label class="form-label-crystal">Tags (comma separated)</label>
+          <input type="text" class="form-control-crystal" formControlName="tags"
+            placeholder="Angular, .NET, SQL Server, Docker" />
+          <p style="font-size:0.72rem;color:var(--text-sub);margin-top:0.3rem">
+            Separate tags with commas. They appear as skill chips on the project card.
+          </p>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label-crystal">Icon</label>
+          <div class="icon-grid">
+            <button type="button" class="icon-btn"
+              *ngFor="let ic of iconOptions"
+              [class.selected]="form.get('iconClass')?.value === ic"
+              (click)="setIcon(ic)">
+              <i class="bi {{ ic }}"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label-crystal">Sort Order</label>
+          <input type="number" class="form-control-crystal" formControlName="sortOrder" min="0" />
+          <p style="font-size:0.72rem;color:var(--text-sub);margin-top:0.3rem">Lower number = appears first</p>
+        </div>
+
+      </div>
+
+      <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn-crystal" [disabled]="saving()">
+          <span *ngIf="!saving()"><i class="bi bi-check-lg"></i>{{ editId() ? 'Update' : 'Create' }} Project</span>
+          <span *ngIf="saving()"><i class="bi bi-arrow-repeat spin"></i>Saving…</span>
+        </button>
+        <button type="button" class="btn-crystal btn-ghost" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Projects table / cards -->
+  <div class="glass-card p-4" *ngIf="!loading(); else loadTpl">
+
+    <div *ngIf="projects().length === 0" class="empty-state">
+      <i class="bi bi-grid"></i>
+      <p>No projects yet. Add your first project to display it on the portfolio.</p>
+      <button class="btn-crystal btn-sm mt-2" (click)="openNew()">
+        <i class="bi bi-plus"></i>Add Project
+      </button>
+    </div>
+
+    <div class="row g-3" *ngIf="projects().length > 0">
+      <div class="col-md-6" *ngFor="let p of projects(); trackBy: trackByProject">
+        <div class="project-admin-card glass-card p-3">
+          <div class="d-flex align-items-start gap-3">
+            <div class="proj-icon-wrap">
+              <i class="bi {{ p.iconClass }}"></i>
+            </div>
+            <div class="flex-1">
+              <p class="proj-title">{{ p.title }}</p>
+              <p class="proj-desc">{{ p.description | slice:0:100 }}{{ p.description.length > 100 ? '…' : '' }}</p>
+              <div class="proj-tags mb-2">
+                <span class="skill-tag" *ngFor="let tag of p.tags">{{ tag }}</span>
+              </div>
+              <div class="d-flex gap-2 align-items-center flex-wrap">
+                <a *ngIf="p.liveUrl" [href]="p.liveUrl" target="_blank"
+                   class="btn-crystal btn-sm" style="font-size:0.7rem">
+                  <i class="bi bi-box-arrow-up-right"></i>Live
+                </a>
+                <a *ngIf="p.repoUrl" [href]="p.repoUrl" target="_blank"
+                   class="btn-crystal btn-amber btn-sm" style="font-size:0.7rem">
+                  <i class="bi bi-github"></i>Repo
+                </a>
+              </div>
+            </div>
+            <div class="d-flex flex-column gap-1">
+              <button class="btn-crystal btn-sm" (click)="edit(p)">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn-crystal btn-danger-crystal btn-sm" (click)="delete(p)">
+                <i class="bi bi-trash3"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadTpl>
+    <div class="glass-card p-4">
+      <div class="row g-3">
+        <div class="col-md-6" *ngFor="let i of [1,2]">
+          <div class="skeleton" style="height:140px;border-radius:12px"></div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+</div>

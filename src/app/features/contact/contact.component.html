@@ -1,0 +1,62 @@
+<!-- src/app/features/contact/contact.component.html -->
+<div class="page-enter contact-page">
+  <div class="container" style="padding:4rem 0 6rem">
+
+    <div class="contact-hero">
+      <span class="section-label">Get In Touch</span>
+      <h1 class="section-title mt-1">Let's Work Together</h1>
+      <div class="section-divider mx-auto mt-2 mb-3"></div>
+      <p class="contact-sub">
+        I'm currently open to full-time opportunities in UAE / GCC. Reach out through any channel below.
+      </p>
+    </div>
+
+    <div class="row g-4 justify-content-center mt-3">
+      <div class="col-lg-3 col-md-6" *ngFor="let c of contacts">
+        <div class="contact-card">
+          <div
+            class="contact-icon"
+            [style.background]="c.bgColor"
+            [style.border-color]="c.borderColor"
+          >
+            <i class="bi {{ c.icon }}" [style.color]="c.iconColor"></i>
+          </div>
+          <p class="contact-label">{{ c.label }}</p>
+          <p class="contact-value">
+            <a [href]="c.href" target="_blank" [style.color]="c.iconColor">{{ c.value }}</a>
+          </p>
+          <div class="mt-3">
+            <a
+              [href]="c.href"
+              target="_blank"
+              class="btn-crystal btn-sm"
+              [style.border-color]="c.borderColor"
+              [style.color]="c.iconColor"
+            >
+              <i class="bi {{ c.btnIcon }}"></i>{{ c.btnLabel }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Location bar -->
+    <div class="row justify-content-center mt-4">
+      <div class="col-lg-7">
+        <div class="glass-card p-4 text-center location-bar">
+          <p>
+            <i class="bi bi-geo-alt-fill text-teal me-2"></i>
+            Based in <strong>Dubai, UAE</strong> · Open to UAE / GCC · Available Immediately
+          </p>
+          <p class="mt-1" style="font-size:0.82rem;color:var(--text-sub)">
+            <i class="bi bi-translate text-teal me-1"></i>
+            Languages: <strong style="color:#fff">English</strong> ·
+            <strong style="color:#fff">Hindi</strong> ·
+            <strong style="color:#fff">Bengali</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

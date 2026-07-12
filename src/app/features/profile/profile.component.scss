@@ -1,0 +1,184 @@
+/* src/app/features/profile/profile.component.scss */
+
+/* Hero */
+.hero {
+  padding: 4rem 0 2.5rem;
+  min-height: 91vh;
+  display: flex;
+  align-items: center;
+}
+
+.hero-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  margin-bottom: 0.75rem;
+}
+
+.hero-role {
+  font-size: 1.05rem;
+  color: var(--text-sub);
+  margin-bottom: 0.5rem;
+  strong { color: var(--amber); font-weight: 600; }
+}
+
+.hero-summary {
+  font-size: 0.9rem;
+  color: var(--text-sub);
+  margin-bottom: 1.5rem;
+  max-width: 520px;
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.83rem;
+  color: var(--text-sub);
+  i { color: var(--teal); font-size: 0.85rem; }
+}
+
+.hero-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 2rem;
+}
+
+.availability-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0,212,170,0.07);
+  border: 1px solid rgba(0,212,170,0.22);
+  border-radius: 50px;
+  padding: 0.4rem 1rem;
+  font-size: 0.78rem;
+  color: var(--teal);
+}
+
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Summary */
+.summary-text {
+  font-size: 0.95rem;
+  color: var(--text-sub);
+  line-height: 1.85;
+}
+
+.info-list {
+  list-style: none;
+  padding: 0; margin: 0;
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: 0.83rem;
+    color: var(--text-sub);
+    padding: 0.35rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    &:last-child { border-bottom: none; }
+    i { margin-top: 0.18rem; flex-shrink: 0; }
+    strong { color: var(--text-main); }
+  }
+}
+
+/* Skills */
+.skill-cat-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--amber);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  i { font-size: 0.85rem; }
+}
+
+/* Timeline */
+.tl-date    { font-size: 0.73rem; color: var(--teal); font-weight: 700; letter-spacing: 0.4px; }
+.tl-company { font-size: 1.02rem; font-weight: 700; color: #fff; margin: 0.15rem 0; }
+.tl-role    { font-size: 0.85rem; color: var(--amber); margin-bottom: 0.3rem; }
+.tl-loc     {
+  font-size: 0.78rem; color: var(--text-sub); margin-bottom: 0.6rem;
+  display: flex; align-items: center; gap: 0.4rem;
+  i { font-size: 0.8rem; }
+}
+.tl-live-link {
+  color: var(--teal); font-size: 0.75rem; display: inline-flex; align-items: center; gap: 0.25rem;
+  text-decoration: none;
+  &:hover { color: var(--teal-light); }
+}
+.tl-bullets {
+  padding-left: 1rem;
+  margin: 0;
+  li {
+    font-size: 0.83rem;
+    color: var(--text-sub);
+    line-height: 1.7;
+    margin-bottom: 0.25rem;
+  }
+}
+
+/* Certifications */
+.cert-card {
+  .cert-icon { font-size: 1.8rem; color: var(--teal); margin-bottom: 0.65rem; }
+  .cert-name { font-size: 0.88rem; font-weight: 700; color: #fff; margin-bottom: 0.2rem; line-height: 1.4; }
+  .cert-org  { font-size: 0.75rem; color: var(--text-sub); margin-bottom: 0.25rem; }
+  .cert-date { font-size: 0.73rem; color: var(--amber); }
+}
+
+/* Education */
+.edu-icon  { font-size: 2.4rem; color: rgba(0,212,170,0.5); margin-top: 0.2rem; }
+.edu-year  { font-size: 0.73rem; color: var(--teal); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.2rem; }
+.edu-degree{ font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 0.2rem; }
+.edu-inst  { font-size: 0.85rem; margin-bottom: 0.15rem; }
+.edu-loc   { font-size: 0.78rem; }
+
+/* Soft skills */
+.soft-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(245,166,35,0.06);
+  border: 1px solid rgba(245,166,35,0.18);
+  color: var(--text-sub);
+  font-size: 0.83rem;
+  padding: 0.45rem 1.1rem;
+  border-radius: 50px;
+  margin: 0.25rem;
+  i { color: var(--amber); }
+}
+
+/* Footer */
+.site-footer {
+  background: var(--navy-mid);
+  border-top: 1px solid var(--border);
+  padding: 1.75rem 0;
+  font-size: 0.78rem;
+  color: var(--text-sub);
+  a { color: var(--teal); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero { text-align: center; padding-top: 2.5rem; }
+  .hero-meta, .hero-btns { justify-content: center; }
+  .availability-pill { font-size: 0.72rem; }
+}

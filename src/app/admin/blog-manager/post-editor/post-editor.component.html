@@ -1,0 +1,184 @@
+<!-- src/app/admin/blog-manager/post-editor/post-editor.component.html -->
+<div class="admin-page-wrap" *ngIf="!loading(); else loadTpl">
+
+  <div class="page-head">
+    <div>
+      <h2 class="page-title">{{ id() ? 'Edit Post' : 'New Post' }}</h2>
+      <p class="page-sub">{{ id() ? 'Update your blog article content and settings.' : 'Create a new blog article for your portfolio.' }}</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn-crystal btn-ghost" (click)="cancel()">Cancel</button>
+      <button class="btn-crystal" [disabled]="saving()" (click)="save(false)">
+        <i class="bi bi-floppy"></i>{{ saving() ? 'Saving…' : 'Save Draft' }}
+      </button>
+      <button class="btn-crystal btn-amber" [disabled]="saving()" (click)="save(true)">
+        <i class="bi bi-send"></i>Publish
+      </button>
+    </div>
+  </div>
+
+  <form [formGroup]="form">
+    <div class="row g-4">
+
+      <!-- Main column -->
+      <div class="col-lg-8">
+
+        <!-- Title -->
+        <div class="glass-card p-4 mb-3">
+          <label class="form-label-crystal">Post Title *</label>
+          <input
+            type="text"
+            class="form-control-crystal"
+            formControlName="title"
+            placeholder="Enter an engaging title…"
+            style="font-size:1.05rem;font-weight:600"
+            (input)="onTitleInput($any($event.target).value)"
+          />
+          <div class="field-err" *ngIf="form.get('title')?.invalid && form.get('title')?.touched">Title is required</div>
+
+          <div class="mt-3">
+            <label class="form-label-crystal">Slug</label>
+            <input type="text" class="form-control-crystal" formControlName="slug" placeholder="auto-generated-from-title" />
+          </div>
+        </div>
+
+        <!-- Editor tabs -->
+        <div class="glass-card mb-3">
+          <div class="editor-tabs">
+            <button type="button" class="editor-tab" [class.active]="activeTab()==='write'"       (click)="activeTab.set('write')">
+              <i class="bi bi-pencil"></i>Write
+            </button>
+            <button type="button" class="editor-tab" [class.active]="activeTab()==='preview'"     (click)="activeTab.set('preview')">
+              <i class="bi bi-eye"></i>Preview
+            </button>
+            <button type="button" class="editor-tab" [class.active]="activeTab()==='attachments'" (click)="activeTab.set('attachments')">
+              <i class="bi bi-paperclip"></i>Attachments
+              <span *ngIf="attachments().length" class="tab-count">{{ attachments().length }}</span>
+            </button>
+            <button type="button" class="ms-auto btn-crystal btn-ghost btn-sm" (click)="estimateReadTime()">
+              <i class="bi bi-clock"></i>Est. Read Time
+            </button>
+          </div>
+
+          <!-- Write -->
+          <div class="p-4" *ngIf="activeTab()==='write'">
+            <label class="form-label-crystal">Body (HTML / Markdown)</label>
+            <textarea
+              class="form-control-crystal"
+              formControlName="body"
+              placeholder="Write your article here… HTML is supported."
+              style="min-height:400px;font-family:monospace;font-size:0.85rem"
+            ></textarea>
+          </div>
+
+          <!-- Preview -->
+          <div class="p-4 preview-body" *ngIf="activeTab()==='preview'">
+            <div *ngIf="form.get('body')?.value; else noContent"
+                 [innerHTML]="form.get('body')?.value">
+            </div>
+            <ng-template #noContent>
+              <p style="color:var(--text-sub);text-align:center;padding:3rem 0">Nothing to preview yet. Start writing in the Write tab.</p>
+            </ng-template>
+          </div>
+
+          <!-- Attachments -->
+          <div class="p-4" *ngIf="activeTab()==='attachments'">
+            <div class="upload-zone" (click)="fileInput.click()">
+              <i class="bi bi-cloud-upload"></i>
+              <p>Click to upload or drag & drop</p>
+              <p style="font-size:0.75rem;color:var(--text-sub)">PDF, images (PNG/JPG/WebP), Excel, Word</p>
+              <input #fileInput type="file" hidden
+                accept=".pdf,.jpg,.jpeg,.png,.webp,.xlsx,.xls,.doc,.docx"
+                (change)="onFileChange($event)" />
+            </div>
+
+            <div class="attachment-list mt-3" *ngIf="attachments().length">
+              <div class="attachment-row" *ngFor="let att of attachments()">
+                <i class="bi {{ getFileIcon(att.fileType) }}" style="font-size:1.2rem;color:var(--teal)"></i>
+                <div class="att-info">
+                  <span class="att-name">{{ att.fileName }}</span>
+                  <span class="att-size">{{ att.fileSizeKb }} KB</span>
+                </div>
+                <a [href]="att.fileUrl" target="_blank" class="btn-crystal btn-ghost btn-sm">
+                  <i class="bi bi-download"></i>
+                </a>
+                <button class="btn-crystal btn-danger-crystal btn-sm" (click)="deleteAttachment(att.id)">
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </div>
+            </div>
+
+            <p *ngIf="!attachments().length" style="color:var(--text-sub);font-size:0.82rem;margin-top:1rem;text-align:center">
+              No attachments yet. Upload files to associate with this post.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar column -->
+      <div class="col-lg-4">
+
+        <!-- Topic & settings -->
+        <div class="glass-card p-4 mb-3">
+          <p class="settings-title"><i class="bi bi-gear me-2 text-teal"></i>Post Settings</p>
+
+          <label class="form-label-crystal">Topic *</label>
+          <select class="form-control-crystal mb-3" formControlName="blogTopicId">
+            <option value="" disabled>Select a topic…</option>
+            <option *ngFor="let t of topics()" [value]="t.id">{{ t.name }}</option>
+          </select>
+          <div class="field-err" *ngIf="form.get('blogTopicId')?.invalid && form.get('blogTopicId')?.touched">Topic is required</div>
+
+          <label class="form-label-crystal">Excerpt *</label>
+          <textarea
+            class="form-control-crystal mb-3"
+            formControlName="excerpt"
+            placeholder="Brief summary shown in the blog list (max 500 chars)…"
+            style="min-height:90px"
+          ></textarea>
+
+          <label class="form-label-crystal">Read Time (minutes)</label>
+          <input type="number" class="form-control-crystal mb-3" formControlName="readTimeMin" min="1" max="120" />
+
+          <div class="toggle-row mb-2">
+            <label class="form-label-crystal mb-0">Featured Post</label>
+            <label class="toggle-switch">
+              <input type="checkbox" formControlName="isFeatured">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <label class="form-label-crystal mb-0">Published</label>
+            <label class="toggle-switch">
+              <input type="checkbox" formControlName="isPublished">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Quick save -->
+        <div class="d-flex flex-column gap-2">
+          <button type="button" class="btn-crystal btn-full" [disabled]="saving()" (click)="save(false)">
+            <i class="bi bi-floppy"></i>Save as Draft
+          </button>
+          <button type="button" class="btn-crystal btn-amber btn-full" [disabled]="saving()" (click)="save(true)">
+            <i class="bi bi-send"></i>Publish Now
+          </button>
+          <button type="button" class="btn-crystal btn-ghost btn-full" (click)="cancel()">
+            <i class="bi bi-x"></i>Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<ng-template #loadTpl>
+  <div class="container" style="padding:3rem 0">
+    <div class="skeleton mb-3" style="height:42px;width:30%"></div>
+    <div class="skeleton mb-2" style="height:55px"></div>
+    <div class="skeleton" style="height:300px"></div>
+  </div>
+</ng-template>

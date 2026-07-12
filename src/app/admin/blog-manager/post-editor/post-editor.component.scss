@@ -1,0 +1,100 @@
+/* src/app/admin/blog-manager/post-editor/post-editor.component.scss */
+.admin-page-wrap { max-width: 1100px; }
+.page-head { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:1.75rem; flex-wrap:wrap; gap:1rem; }
+.page-title{ font-family:'Playfair Display',serif; font-size:1.65rem; font-weight:700; color:#fff; margin:0; }
+.page-sub  { font-size:0.82rem; color:var(--text-sub); margin:0.3rem 0 0; }
+
+.editor-tabs {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+.editor-tab {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  background: none; border: none;
+  color: var(--text-sub); font-size: 0.83rem; font-weight: 500;
+  padding: 0.4rem 0.85rem; border-radius: 8px;
+  cursor: pointer; transition: all 0.2s;
+  &:hover  { color: var(--teal); background: rgba(0,212,170,0.07); }
+  &.active { color: var(--teal); background: rgba(0,212,170,0.12); }
+}
+.tab-count {
+  background: rgba(245,166,35,0.15); color: var(--amber);
+  font-size:0.65rem; font-weight:700; padding:0.1rem 0.4rem; border-radius:10px;
+}
+
+.settings-title { font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-sub); margin-bottom:1.25rem; }
+
+/* Toggle switch */
+.toggle-row { display:flex; align-items:center; justify-content:space-between; }
+.toggle-switch {
+  position: relative;
+  input { display:none; }
+  .toggle-track {
+    display:block; width:40px; height:22px;
+    background: rgba(255,255,255,0.1); border:1px solid var(--border);
+    border-radius:11px; cursor:pointer; transition: all 0.3s; position:relative;
+    &::after {
+      content:''; position:absolute; top:3px; left:3px;
+      width:14px; height:14px; background:#fff; border-radius:50%;
+      transition: transform 0.3s;
+    }
+  }
+  input:checked + .toggle-track {
+    background: var(--teal); border-color: var(--teal);
+    &::after { transform: translateX(18px); }
+  }
+}
+
+/* Upload zone */
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 2.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s;
+  i { font-size:2.5rem; color:rgba(0,212,170,0.3); display:block; margin-bottom:0.75rem; }
+  p { color:var(--text-sub); font-size:0.85rem; margin-bottom:0.25rem; }
+  &:hover { border-color:rgba(0,212,170,0.5); background:rgba(0,212,170,0.04); }
+}
+
+.attachment-row {
+  display:flex; align-items:center; gap:0.75rem;
+  padding:0.6rem; border:1px solid var(--border); border-radius:10px; margin-bottom:0.5rem;
+}
+.att-info  { flex:1; min-width:0; }
+.att-name  { display:block; font-size:0.82rem; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.att-size  { font-size:0.7rem; color:var(--text-sub); }
+
+.preview-body {
+  color:var(--text-main); line-height:1.8; font-size:0.92rem;
+  h1,h2,h3 { color:#fff; font-family:'Playfair Display',serif; margin:1.5rem 0 0.75rem; }
+  p   { color:var(--text-sub); margin-bottom:1rem; }
+  code{ background:rgba(0,212,170,0.1); color:var(--teal); padding:0.15rem 0.4rem; border-radius:4px; font-size:0.85em; }
+  pre { background:var(--navy-mid); border:1px solid var(--border); border-radius:10px; padding:1rem; overflow-x:auto; }
+  a   { color:var(--teal); }
+  blockquote { border-left:3px solid var(--teal); padding-left:1rem; margin:1rem 0; color:var(--text-sub); }
+}
+
+.field-err { font-size:0.72rem; color:#f87171; margin-top:0.25rem; }
+
+/* shared post-list styles */
+.filter-tabs { display:flex; gap:0.5rem; flex-wrap:wrap; }
+.filter-tab {
+  display:inline-flex; align-items:center; gap:0.4rem;
+  background:var(--glass-bg); border:1px solid var(--border);
+  color:var(--text-sub); font-size:0.82rem; font-weight:500;
+  padding:0.4rem 1rem; border-radius:50px; cursor:pointer; transition:all 0.22s;
+  span { background:rgba(255,255,255,0.06); padding:0.05rem 0.4rem; border-radius:8px; font-size:0.72rem; }
+  &:hover { color:var(--teal); border-color:rgba(0,212,170,0.35); }
+  &.active { background:rgba(0,212,170,0.1); color:var(--teal); border-color:rgba(0,212,170,0.4); }
+}
+
+.empty-state {
+  text-align:center; padding:3rem 1rem; color:var(--text-sub);
+  i { font-size:2.8rem; color:rgba(0,212,170,0.18); display:block; margin-bottom:0.75rem; }
+}
