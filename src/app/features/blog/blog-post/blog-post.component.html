@@ -180,12 +180,12 @@
             <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-sub);margin-bottom:0.75rem">Share</p>
             <div class="d-flex gap-2">
               <a class="btn-crystal btn-sm" style="border-color:rgba(10,102,194,0.4);color:#4a9eff"
-                 [href]="'https://linkedin.com/sharing/share-offsite/?url=' + encodeURI(post()!.slug)"
+                 [href]="'https://linkedin.com/sharing/share-offsite/?url=' + encodeUri(post()!.slug)"
                  target="_blank">
                 <i class="bi bi-linkedin"></i>
               </a>
               <a class="btn-crystal btn-sm"
-                 [href]="'https://twitter.com/intent/tweet?text=' + encodeURI(post()!.title)"
+                 [href]="'https://twitter.com/intent/tweet?text=' + encodeUri(post()!.title)"
                  target="_blank">
                 <i class="bi bi-twitter-x"></i>
               </a>

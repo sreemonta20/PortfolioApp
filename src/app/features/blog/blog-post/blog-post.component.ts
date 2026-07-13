@@ -99,4 +99,8 @@ export class BlogPostComponent implements OnInit {
     const m: Record<string, string> = { pdf:'#f87171', image:'#60a5fa', excel:'#4ade80', word:'#818cf8' };
     return m[type] ?? 'var(--teal)';
   }
+
+  encodeUri(value: string): string {
+    return encodeURI(value);
+  }
 }

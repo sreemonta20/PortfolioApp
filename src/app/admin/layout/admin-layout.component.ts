@@ -27,22 +27,22 @@ export class AdminLayoutComponent {
     {
       title: 'Overview',
       links: [
-        { path: '/admin/dashboard', label: 'Dashboard', icon: 'bi-speedometer2' },
+        { path: '/admin/dashboard', label: 'Dashboard', icon: 'bi-speedometer2', external: false },
       ]
     },
     {
       title: 'CV Management',
       links: [
-        { path: '/admin/cv',       label: 'CV & Profile',   icon: 'bi-person-lines-fill' },
-        { path: '/admin/projects', label: 'Projects',        icon: 'bi-grid-fill' },
+        { path: '/admin/cv',       label: 'CV & Profile',   icon: 'bi-person-lines-fill', external: false },
+        { path: '/admin/projects', label: 'Projects',        icon: 'bi-grid-fill', external: false },
       ]
     },
     {
       title: 'Blog Management',
       links: [
-        { path: '/admin/blog/topics',   label: 'Topics',           icon: 'bi-tags-fill' },
-        { path: '/admin/blog/posts',    label: 'Posts',            icon: 'bi-file-earmark-text-fill' },
-        { path: '/admin/blog/comments', label: 'Comments',         icon: 'bi-chat-dots-fill' },
+        { path: '/admin/blog/topics',   label: 'Topics',           icon: 'bi-tags-fill', external: false },
+        { path: '/admin/blog/posts',    label: 'Posts',            icon: 'bi-file-earmark-text-fill', external: false },
+        { path: '/admin/blog/comments', label: 'Comments',         icon: 'bi-chat-dots-fill', external: false },
       ]
     },
     {

@@ -17,10 +17,10 @@
       All <span>{{ posts().length }}</span>
     </button>
     <button class="filter-tab" [class.active]="filter()==='published'" (click)="filter.set('published')">
-      Published <span>{{ posts().filter(p => !!p.publishedAt).length }}</span>
+      Published <span>{{ publishedCount() }}</span>
     </button>
     <button class="filter-tab" [class.active]="filter()==='draft'"     (click)="filter.set('draft')">
-      Drafts <span>{{ posts().filter(p => !p.publishedAt).length }}</span>
+      Drafts <span>{{ draftCount() }}</span>
     </button>
   </div>
 

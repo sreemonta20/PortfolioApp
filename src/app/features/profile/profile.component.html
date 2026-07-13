@@ -15,7 +15,8 @@
           <p class="hero-role">
             <strong>{{ cv().role }}</strong>
           </p>
-          <p class="hero-summary">12+ years building enterprise solutions across healthcare, insurance, biometric &amp; ERP platforms.</p>
+          <p class="hero-summary">12+ years building enterprise solutions across healthcare, insurance, biometric &amp;
+            ERP platforms.</p>
 
           <div class="hero-meta">
             <span class="meta-item"><i class="bi bi-geo-alt-fill"></i>{{ cv().address }}</span>
@@ -45,8 +46,9 @@
         <div class="col-lg-5 order-1 order-lg-2 text-center">
           <div class="avatar-ring" style="width:270px;height:270px">
             <div class="avatar-inner">
-              <img *ngIf="cv().photoUrl; else avatarPlaceholder"
-                   [src]="cv().photoUrl" [alt]="fullName" />
+              <!-- <img *ngIf="cv().photoUrl; else avatarPlaceholder"
+                   [src]="cv().photoUrl" [alt]="fullName" /> -->
+              <img *ngIf="photoSrc; else avatarPlaceholder" [src]="photoSrc" [alt]="fullName" />
               <ng-template #avatarPlaceholder>
                 <i class="bi bi-person-fill" style="font-size:7rem;color:rgba(0,212,170,0.4)"></i>
               </ng-template>
@@ -80,13 +82,17 @@
             <span class="section-label mb-3 d-block">Additional Info</span>
             <ul class="info-list">
               <li><i class="bi bi-check-circle-fill text-teal"></i>
-                <span><strong>Availability:</strong> {{ cv().availability }}</span></li>
+                <span><strong>Availability:</strong> {{ cv().availability }}</span>
+              </li>
               <li><i class="bi bi-check-circle-fill text-teal"></i>
-                <span><strong>Visa:</strong> {{ cv().visaStatus }}</span></li>
+                <span><strong>Visa:</strong> {{ cv().visaStatus }}</span>
+              </li>
               <li><i class="bi bi-check-circle-fill text-teal"></i>
-                <span><strong>Location:</strong> {{ cv().address }}</span></li>
+                <span><strong>Location:</strong> {{ cv().address }}</span>
+              </li>
               <li><i class="bi bi-check-circle-fill text-teal"></i>
-                <span><strong>Languages:</strong> {{ cv().languages }}</span></li>
+                <span><strong>Languages:</strong> {{ cv().languages }}</span>
+              </li>
             </ul>
           </div>
         </div>
@@ -103,19 +109,13 @@
         <div class="section-divider"></div>
       </div>
       <div class="row g-3">
-        <div
-          class="col-lg-6 col-xl-4"
-          *ngFor="let cat of cv().skillCategories; trackBy: trackBySkillCat"
-        >
+        <div class="col-lg-6 col-xl-4" *ngFor="let cat of cv().skillCategories; trackBy: trackBySkillCat">
           <div class="glass-card p-4 h-100">
             <p class="skill-cat-title">
               <i class="bi {{ cat.iconClass }}"></i>{{ cat.name }}
             </p>
             <div>
-              <span
-                class="skill-tag"
-                *ngFor="let skill of cat.skills; trackBy: trackBySkill"
-              >{{ skill.name }}</span>
+              <span class="skill-tag" *ngFor="let skill of cat.skills; trackBy: trackBySkill">{{ skill.name }}</span>
             </div>
           </div>
         </div>
@@ -132,10 +132,7 @@
         <div class="section-divider"></div>
       </div>
       <div class="timeline">
-        <div
-          class="timeline-item"
-          *ngFor="let exp of cv().experiences; trackBy: trackByExp"
-        >
+        <div class="timeline-item" *ngFor="let exp of cv().experiences; trackBy: trackByExp">
           <p class="tl-date">
             {{ exp.startDate | date:'MMM yyyy' }} –
             {{ exp.isCurrent ? 'Present' : (exp.endDate | date:'MMM yyyy') }}
@@ -165,10 +162,7 @@
         <div class="section-divider"></div>
       </div>
       <div class="row g-3">
-        <div
-          class="col-lg-4 col-md-6"
-          *ngFor="let cert of cv().certifications; trackBy: trackByCert"
-        >
+        <div class="col-lg-4 col-md-6" *ngFor="let cert of cv().certifications; trackBy: trackByCert">
           <div class="cert-card glass-card p-4">
             <div class="cert-icon"><i class="bi {{ cert.iconClass }}"></i></div>
             <p class="cert-name">{{ cert.name }}</p>
@@ -196,10 +190,7 @@
         <div class="section-divider"></div>
       </div>
       <div class="row g-4">
-        <div
-          class="col-md-6"
-          *ngFor="let edu of cv().educations; trackBy: trackByEdu"
-        >
+        <div class="col-md-6" *ngFor="let edu of cv().educations; trackBy: trackByEdu">
           <div class="glass-card p-4 d-flex gap-3">
             <div class="edu-icon"><i class="bi bi-mortarboard-fill"></i></div>
             <div>
@@ -223,10 +214,7 @@
         <div class="section-divider"></div>
       </div>
       <div>
-        <span
-          class="soft-pill"
-          *ngFor="let ss of cv().softSkills"
-        >
+        <span class="soft-pill" *ngFor="let ss of cv().softSkills">
           <i class="bi {{ ss.iconClass }}"></i>{{ ss.name }}
         </span>
       </div>
@@ -254,7 +242,9 @@
 <!-- Footer -->
 <footer class="site-footer">
   <div class="container text-center">
-    <p>© {{ 2026 }} <a [href]="cv().portfolioUrl" target="_blank">Sreemonta Bhowmik</a> · Built with Angular 18 + .NET 10 API</p>
-    <p class="mt-1" style="font-size:0.7rem;color:var(--text-sub)">Dubai, UAE · {{ cv().email }} · {{ cv().mobileNumber }}</p>
+    <p>© {{ 2026 }} <a [href]="cv().portfolioUrl" target="_blank">Sreemonta Bhowmik</a> · Built with Angular 18 + .NET
+      10 API</p>
+    <p class="mt-1" style="font-size:0.7rem;color:var(--text-sub)">Dubai, UAE · {{ cv().email }} · {{ cv().mobileNumber
+      }}</p>
   </div>
 </footer>

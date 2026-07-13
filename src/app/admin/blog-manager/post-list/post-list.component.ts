@@ -1,7 +1,7 @@
 // ============================================================
 // src/app/admin/blog-manager/post-list/post-list.component.ts
 // ============================================================
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AdminApiService } from '../../../core/services/admin-api.service';
@@ -22,12 +22,15 @@ export class PostListComponent implements OnInit {
   loading= signal(true);
   filter = signal<'all'|'published'|'draft'>('all');
 
-  filteredPosts = () => {
+  publishedCount = computed(() => this.posts().filter(p => !!p.publishedAt).length);
+  draftCount     = computed(() => this.posts().filter(p => !p.publishedAt).length);
+
+  filteredPosts = computed(() => {
     const f = this.filter();
     if (f === 'published') return this.posts().filter(p => !!p.publishedAt);
     if (f === 'draft')     return this.posts().filter(p => !p.publishedAt);
     return this.posts();
-  };
+  });
 
   ngOnInit() { this.load(); }
 

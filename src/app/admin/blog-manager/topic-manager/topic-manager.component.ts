@@ -74,14 +74,22 @@ export class TopicManagerComponent implements OnInit {
     this.saving.set(true);
     const val = this.form.value;
     const id  = this.editingId();
-    const obs = id
-      ? this.admin.updateTopic(id, val)
-      : this.admin.createTopic(this.appId, val);
 
-    obs.subscribe({
+    // NOTE: updateTopic() returns Observable<void> and createTopic() returns
+    // Observable<BlogTopic>. Assigning either result to one variable via a
+    // ternary makes TS infer a union of two Observable<T> types whose
+    // .subscribe() overloads don't unify, which is what caused
+    // "TS2349: This expression is not callable". Branching explicitly avoids it.
+    const onDone = {
       next: () => { this.load(); this.cancel(); this.saving.set(false); },
       error: () => this.saving.set(false)
-    });
+    };
+
+    if (id) {
+      this.admin.updateTopic(id, val).subscribe(onDone);
+    } else {
+      this.admin.createTopic(this.appId, val).subscribe(onDone);
+    }
   }
 
   delete(t: BlogTopic) {

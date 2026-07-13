@@ -6,22 +6,23 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { PortfolioApiService } from '../../core/services/portfolio-api.service';
 import { CVProfile, STATIC_CV } from '../../core/models/portfolio.models';
+import { environment } from '../../../environments/environment';
 
 @Component({
-  selector: 'app-profile',
+  selector: "app-profile",
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  templateUrl: "./profile.component.html",
+  styleUrls: ["./profile.component.scss"],
 })
 export class ProfileComponent implements OnInit {
   private api = inject(PortfolioApiService);
 
-  cv      = signal<CVProfile>(STATIC_CV as CVProfile);
+  cv = signal<CVProfile>(STATIC_CV as CVProfile);
   loading = signal(true);
 
   ngOnInit() {
-    this.api.getCv().subscribe(data => {
+    this.api.getCv().subscribe((data) => {
       this.cv.set(data);
       this.loading.set(false);
     });
@@ -32,9 +33,27 @@ export class ProfileComponent implements OnInit {
     return `${cv.firstName} ${cv.lastName}`;
   }
 
-  trackBySkillCat(_: number, item: any) { return item.id; }
-  trackBySkill(_: number, item: any)    { return item.id; }
-  trackByExp(_: number, item: any)      { return item.id; }
-  trackByEdu(_: number, item: any)      { return item.id; }
-  trackByCert(_: number, item: any)     { return item.id; }
+  get photoSrc(): string | null {
+    const url = this.cv().photoUrl;
+    if (!url) return null;
+    if (/^https?:\/\//i.test(url)) return url; // already absolute, leave it
+    const origin = new URL(environment.apiUrl).origin;
+    return `${origin}${url}`;
+  }
+
+  trackBySkillCat(_: number, item: any) {
+    return item.id;
+  }
+  trackBySkill(_: number, item: any) {
+    return item.id;
+  }
+  trackByExp(_: number, item: any) {
+    return item.id;
+  }
+  trackByEdu(_: number, item: any) {
+    return item.id;
+  }
+  trackByCert(_: number, item: any) {
+    return item.id;
+  }
 }
